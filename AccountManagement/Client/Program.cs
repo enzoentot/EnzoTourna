@@ -45,7 +45,7 @@ namespace Client
                         string name = Console.ReadLine();
                         SqlDbData.DeleteUser(name);
 
-                        Console.WriteLine("Okay!");
+                        Console.WriteLine("Okay! Betterluck next time!");
 
                     }
                     else if (number == "3")

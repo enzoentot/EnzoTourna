@@ -15,9 +15,9 @@ namespace Client
 
                     Console.WriteLine("ENZO's MLBB Tournament Registration");
                     Console.WriteLine("What's up?");
-                    Console.WriteLine("1.People wants to join");
-                    Console.WriteLine("2.People wants to backout");
-                    Console.WriteLine("3.Details of the People that joined");
+                    Console.WriteLine("1.Registration");
+                    Console.WriteLine("2.Un - Register");
+                    Console.WriteLine("3.Joined Players");
 
 
                     Console.WriteLine("Enter the number:");

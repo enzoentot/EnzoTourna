@@ -34,7 +34,7 @@ namespace Client
                         string clWeight = Console.ReadLine();
                         SqlDbData.AddUser(name, clWeight);
 
-                        Console.WriteLine("Okay, thankyou goodluck");
+                        Console.WriteLine("Welcome to Land of Dawn!!");
 
                     }
 

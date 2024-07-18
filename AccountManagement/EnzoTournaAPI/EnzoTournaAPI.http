@@ -1,0 +1,6 @@
+@EnzoTournaAPI_HostAddress = http://localhost:5263
+
+GET {{EnzoTournaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,38 +1,37 @@
-﻿using TournaManagementModels;
+﻿using System.Reflection.Metadata;
+using TournaManagementModels;
 
 namespace TournaManagementData
 {
     public class UserData
     {
         List<User> users;
+        SqlDbData sqlData;
+
         public UserData()
         {
             users = new List<User>();
-            UserFactory _userFactory = new UserFactory();
-            users = _userFactory.GetDummyUsers();
+            sqlData = new SqlDbData();
         }
-
         public List<User> GetUsers()
         {
+            users = sqlData.GetUsers();
             return users;
         }
 
-        public void AddUser(User user)
+        public int AddUser(User user)
         {
-           users.Add(user);
+            return sqlData.AddUser(user.ign, user.mlbbid, user.status);
         }
 
-        public void UpdateUser(User user)
+        public int UpdateUser(User user)
         {
-            for (int i = 0; i < users.Count; i++)
-            {
-                if (users[i].ign == user.ign)
-                {
-                    users[i].profile = user.profile;
-                    users[i].ign = user.ign;
-                    users[i].dateUpdated = DateTime.Now;
-                }
-            }
+            return sqlData.UpdateUser(user.ign, user.mlbbid, user.status);
+        }
+
+        public int DeleteUser(User user)
+        {
+            return sqlData.DeleteUser(user.ign);
         }
     }
 }

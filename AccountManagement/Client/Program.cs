@@ -1,6 +1,7 @@
-using TournaManagementData;
 using TournaManagementModels;
+using TournaManagementServices;
 using System;
+using System.Collections.Generic;
 
 namespace Client
 {
@@ -9,73 +10,65 @@ namespace Client
         static void Main(string[] args)
         {
             bool active = true;
+            UserGetServices userGetServices = new UserGetServices();
+            UserTransactionServices userTransactionServices = new UserTransactionServices();
+
             while (active)
             {
+                Console.WriteLine("ENZO's MLBB Tournament Registration");
+                Console.WriteLine("What's up?");
+                Console.WriteLine("1. Registration");
+                Console.WriteLine("2. Unregister");
+                Console.WriteLine("3. Joined Players");
+                Console.WriteLine("4. Exit");
+
+                Console.WriteLine("Enter the number:");
+                string number = Console.ReadLine();
+
+                switch (number)
                 {
-
-                    Console.WriteLine("ENZO's MLBB Tournament Registration");
-                    Console.WriteLine("What's up?");
-                    Console.WriteLine("1.Registration");
-                    Console.WriteLine("2.Un - Register");
-                    Console.WriteLine("3.Joined Players");
-
-
-                    Console.WriteLine("Enter the number:");
-                    string number = Console.ReadLine();
-
-                    if (number == "1")
-                    {
+                    case "1":
                         Console.WriteLine("What is the IGN?");
-                        string name = Console.ReadLine();
-
-
+                        string ign = Console.ReadLine();
 
                         Console.WriteLine("What is the MLBB ID?");
-                        string clWeight = Console.ReadLine();
-                        SqlDbData.AddUser(name, clWeight);
+                        string mlbbid = Console.ReadLine();
 
+                        User newUser = new User { ign = ign, mlbbid = mlbbid, status = "Registered" };
+                        userTransactionServices.CreateUser(newUser);
                         Console.WriteLine("Welcome to Land of Dawn!!");
+                        break;
 
-                    }
-
-                    else if (number == "2")
-                    {
-
+                    case "2":
                         Console.WriteLine("Okay, what's the registered IGN?");
-                        string name = Console.ReadLine();
-                        SqlDbData.DeleteUser(name);
+                        string unregisterIgn = Console.ReadLine();
 
-                        Console.WriteLine("Okay! Betterluck next time!");
+                        User userToDelete = new User { ign = unregisterIgn };
+                        userTransactionServices.DeleteUser(userToDelete);
+                        Console.WriteLine("Okay! Better luck next time!");
+                        break;
 
-                    }
-                    else if (number == "3")
-                    {
-                        Console.WriteLine("Okay, heres the details");
-                        Console.WriteLine("");
-                        GetUsers();
+                    case "3":
+                        Console.WriteLine("Okay, here's the details:");
+                        DisplayUsers(userGetServices.GetAllUsers());
+                        break;
 
-                    }
+                    case "4":
+                        active = false;
+                        break;
 
-                else
-                {
-                    Console.WriteLine("ERROR");
+                    default:
+                        Console.WriteLine("ERROR: Invalid input, please try again.");
+                        break;
                 }
-
-
             }
         }
 
-
-        }
-
-        public static void GetUsers()
+        public static void DisplayUsers(List<User> users)
         {
-            List<User> usersFromDB = SqlDbData.GetUsers();
-
-            foreach (var item in usersFromDB)
+            foreach (var item in users)
             {
-                Console.WriteLine(item.ign);
-                Console.WriteLine(item.mlbbid);
+                Console.WriteLine($"IGN: {item.ign}, MLBB ID: {item.mlbbid}, Status: {item.status}");
             }
         }
     }

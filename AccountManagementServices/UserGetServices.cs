@@ -5,7 +5,7 @@ namespace TournaManagementServices
 {
     public class UserGetServices
     {
-        private List<User> GetAllUsers()
+        public List<User> GetAllUsers()
         {
             UserData userData = new UserData();
 
@@ -13,43 +13,29 @@ namespace TournaManagementServices
 
         }
 
-        public List<User> GetUsersByStatus(int userStatus)
+        public List<User> GetUsers(string ign)
         {
-            List<User> usersByStatus = new List<User>();
+            List<User> users = new List<User>();
 
             foreach (var user in GetAllUsers())
             {
-                if (user.status == userStatus)
+                if (user.status == ign)
                 {
-                    usersByStatus.Add(user);
+                    users.Add(user);
                 }
             }
 
-            return usersByStatus;
+            return users;
         }
 
-        public User GetUser(string username, string mlbbid)
+        public User GetUsers(string ign, string mlbbid, string status)
         {
             User foundUser = new User();
 
             foreach (var user in GetAllUsers())
             {
-                if (user.ign == username && user.mlbbid == mlbbid)
-                {
-                    foundUser = user;
-                }
-            }
+                if (user.ign == ign && user.mlbbid == mlbbid && user.status == status)
 
-            return foundUser;
-        }
-
-        public User GetUser(string username)
-        {
-            User foundUser = new User();
-
-            foreach (var user in GetAllUsers())
-            {
-                if (user.ign == username)
                 {
                     foundUser = user;
                 }

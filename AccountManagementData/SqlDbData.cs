@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TournaManagementModels;
 
 namespace TournaManagementData
@@ -11,18 +7,18 @@ namespace TournaManagementData
     public class SqlDbData
     {
         static string connectionString
-        = "Data Source =ENZO\\SQLEXPRESS; Initial Catalog = Enzotourna; Integrated Security = True;";
+        = "Server = tcp:20.205.138.211,1433; Database = Enzotourna; User Id = sa; Password = bsitenzo2!";
 
-        static SqlConnection sqlConnection = new SqlConnection(connectionString);
+        SqlConnection sqlConnection;
 
-        public static void Connect()
+        public SqlDbData()
         {
-            sqlConnection.Open();
+            sqlConnection = new SqlConnection(connectionString);
         }
 
-        public static List<User> GetUsers()
+        public List<User> GetUsers()
         {
-            string selectStatement = "SELECT ign, mlbbid FROM users";
+            string selectStatement = "SELECT ign, mlbbid, status FROM users";
 
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
 
@@ -35,10 +31,12 @@ namespace TournaManagementData
             {
                 string ign = reader["ign"].ToString();
                 string mlbbid = reader["mlbbid"].ToString();
+                string status = reader["status"].ToString();
 
                 User readUser = new User();
                 readUser.ign = ign;
                 readUser.mlbbid = mlbbid;
+                readUser.status = status;
 
                 users.Add(readUser);
             }
@@ -48,16 +46,17 @@ namespace TournaManagementData
             return users;
         }
 
-        public static int AddUser(string ign, string mlbbid)
+        public int AddUser(string ign, string mlbbid, string status)
         {
             int success;
 
-            string insertStatement = "INSERT INTO users VALUES (@ign, @mlbbid)";
+            string insertStatement = "INSERT INTO users VALUES (@ign, @mlbbid, @status)";
 
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
             insertCommand.Parameters.AddWithValue("@ign", ign);
             insertCommand.Parameters.AddWithValue("@mlbbid", mlbbid);
+            insertCommand.Parameters.AddWithValue("@status", status);
             sqlConnection.Open();
 
             success = insertCommand.ExecuteNonQuery();
@@ -68,32 +67,40 @@ namespace TournaManagementData
 
         }
 
-        public static void UpdateUser(string ign, string mlbbid)
+        public int UpdateUser(string ign, string mlbbid, string status)
         {
-            var updateStatment = $"UPDATE users SET mlbbid = @mlbbid WHERE ign = @ign";
-            SqlCommand updateCommand = new SqlCommand(updateStatment, sqlConnection);
+            int success;
+
+            string updateStatement = $"UPDATE users SET mlbbid = @mlbbid WHERE ign = @ign";
+            SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
             sqlConnection.Open();
 
-            updateCommand.Parameters.AddWithValue("@ign", ign);
             updateCommand.Parameters.AddWithValue("@mlbbid", mlbbid);
+            updateCommand.Parameters.AddWithValue("@ign", ign);
 
-            updateCommand.ExecuteNonQuery();
+            success = updateCommand.ExecuteNonQuery();
 
             sqlConnection.Close();
+
+            return success;
+
         }
 
-        public static void DeleteUser(string ign)
+        public int DeleteUser(string ign)
         {
+            int success;
+
             string deleteStatement = $"DELETE FROM users WHERE ign = @ign";
-            SqlCommand deleteCommand = new SqlCommand(deleteStatement , sqlConnection);
+            SqlCommand deleteCommand = new SqlCommand(deleteStatement, sqlConnection);
             sqlConnection.Open();
 
             deleteCommand.Parameters.AddWithValue("@ign", ign);
 
-            deleteCommand.ExecuteNonQuery();
+            success = deleteCommand.ExecuteNonQuery();
 
             sqlConnection.Close();
 
+            return success;
         }
 
     }
